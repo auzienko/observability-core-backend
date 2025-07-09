@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: observability_postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: observability_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: on-failure
+
+  backend:
+    build: .
+    container_name: observability_backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/observability_db
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: password
+      # Добавим переменную для CORS, чтобы фронтенд мог обращаться к API
+      CORS_ALLOWED_ORIGINS: http://localhost:3000
+    depends_on:
+      - postgres
+    restart: always
+
+  frontend:
+    image: ghcr.io/auzienko/observability-core-frontend:latest
+    container_name: observability_frontend
+    ports:
+      - "3000:80"
+    restart: always
+    depends_on:
+      - backend
+
+  user-service:
+    image: ghcr.io/auzienko/user-service:latest
+    container_name: mock_user_service
+    ports:
+      - "9001:8080"
+    restart: always
+
+  transaction-service:
+    image: ghcr.io/auzienko/transaction-service:latest
+    container_name: mock_transaction_service
+    ports:
+      - "9002:8080"
+    restart: always
+
+volumes:
+  postgres_data:
