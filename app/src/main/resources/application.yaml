@@ -1,0 +1,49 @@
+# ===================================================================
+# SERVER CONFIGURATION
+# ===================================================================
+server:
+  port: 8888
+  shutdown: graceful
+  tomcat:
+    connection-timeout: 2s
+    keep-alive-timeout: 15s
+    threads:
+      max: 50
+      min-spare: 5
+
+# ===================================================================
+# SPRING BOOT GENERAL CONFIGURATION
+# ===================================================================
+spring:
+  application:
+    name: observability-core-backend
+
+ # ===================================================================
+ # DATABASE (JPA/HIBERNATE) CONFIGURATION
+ # ===================================================================
+  datasource:
+    url: jdbc:postgresql://localhost:5432/observability_core_backend
+    username: docker_user
+    password: docker_user
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+
+  # ===================================================================
+  # FLYWAY DATABASE MIGRATION
+  # ===================================================================
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+
+app:
+  monitoring:
+    scheduler:
+      fixed-rate-ms: 30000 # 30 секунд
