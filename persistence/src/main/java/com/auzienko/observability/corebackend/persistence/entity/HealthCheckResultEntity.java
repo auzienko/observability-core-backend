@@ -33,7 +33,6 @@ public class HealthCheckResultEntity {
     @Enumerated(EnumType.STRING)
     private ServiceStatus status;
 
-    private Integer httpStatusCode;
-    private Long responseTimeMs;
+    private String errorMessage;
 
 }

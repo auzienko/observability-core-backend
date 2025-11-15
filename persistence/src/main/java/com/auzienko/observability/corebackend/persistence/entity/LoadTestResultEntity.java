@@ -1,9 +1,7 @@
 package com.auzienko.observability.corebackend.persistence.entity;
 
-import com.auzienko.observability.corebackend.domain.model.ServiceStatus;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,12 +26,20 @@ public class LoadTestResultEntity {
     private UUID serviceId;
 
     @CreationTimestamp
-    private Instant timestamp;
+    private Instant executedAt;
 
-    @Enumerated(EnumType.STRING)
-    private ServiceStatus status;
+    private Long totalRequests;
 
-    private Integer httpStatusCode;
-    private Long responseTimeMs;
+    private Long successfulRequests;
+
+    private Double requestsPerSecond;
+
+    private Long avgResponseTimeMs;
+
+    @Column(name = "p95_response_time_ms")
+    private Long p95ResponseTimeMs;
+
+    @Column(name = "p99_response_time_ms")
+    private Long p99ResponseTimeMs;
 
 }

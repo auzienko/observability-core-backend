@@ -19,6 +19,7 @@
 
     <modules>
         <module>public-api</module>
+        <module>load-tester</module>
         <module>domain</module>
         <module>persistence</module>
         <module>api</module>
@@ -73,6 +74,11 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>app</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>load-tester</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

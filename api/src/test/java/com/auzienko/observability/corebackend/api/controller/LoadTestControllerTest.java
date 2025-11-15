@@ -1,7 +1,7 @@
 package com.auzienko.observability.corebackend.api.controller;
 
 import com.auzienko.observability.corebackend.domain.model.LoadTestScenario;
-import com.auzienko.observability.corebackend.domain.service.LoadTester;
+import com.auzienko.observability.corebackend.loadtester.service.LoadTestService;
 import com.auzienko.observability.corebackend.publicapi.dto.LoadTestRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -32,7 +32,7 @@ class LoadTestControllerTest {
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
     @Mock
-    private LoadTester loadTester;
+    private LoadTestService loadTester;
 
     @InjectMocks
     private LoadTestController loadTestController;
@@ -52,7 +52,7 @@ class LoadTestControllerTest {
         request.setVirtualUsers(10);
         request.setDurationSeconds(30);
 
-        given(loadTester.startLoadTest(any(UUID.class), any(LoadTestScenario.class)))
+        given(loadTester.executeAndSave(any(UUID.class), any(LoadTestScenario.class)))
                 .willReturn(CompletableFuture.completedFuture(null));
 
         // ACT & ASSERT

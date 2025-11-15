@@ -1,7 +1,7 @@
 package com.auzienko.observability.corebackend.api.controller;
 
 import com.auzienko.observability.corebackend.domain.model.LoadTestScenario;
-import com.auzienko.observability.corebackend.domain.service.LoadTester;
+import com.auzienko.observability.corebackend.loadtester.service.LoadTestService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,14 +18,14 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class LoadTestController {
 
-    private final LoadTester loadTester;
+    private final LoadTestService loadTester;
 
     @PostMapping
     public ResponseEntity<Void> startLoadTest(
             @PathVariable UUID serviceId,
             @Valid @RequestBody LoadTestScenario scenario) {
 
-        loadTester.startLoadTest(serviceId, scenario);
+        loadTester.executeAndSave(serviceId, scenario);
 
         return ResponseEntity.accepted().build();
     }

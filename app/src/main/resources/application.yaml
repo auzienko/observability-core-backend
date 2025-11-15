@@ -46,4 +46,4 @@ spring:
 app:
   monitoring:
     scheduler:
-      fixed-rate-ms: 30000 # 30 секунд
+      fixed-rate-ms: 60000 # 30 секунд

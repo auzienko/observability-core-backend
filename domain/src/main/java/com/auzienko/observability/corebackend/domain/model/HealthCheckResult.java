@@ -12,7 +12,6 @@ public class HealthCheckResult {
     private UUID serviceId;
     private Instant timestamp;
     private ServiceStatus status;
-    private Integer httpStatusCode;
-    private Long responseTimeMs;
+    private String errorMessage;
 
 }

@@ -32,8 +32,6 @@ public class MonitoredServiceEntity {
     @JdbcTypeCode(SqlTypes.JSON)
     private String healthCheckScenario;
 
-    private Integer pollingIntervalSeconds;
-
     @Enumerated(EnumType.STRING)
     private ServiceStatus status;
 

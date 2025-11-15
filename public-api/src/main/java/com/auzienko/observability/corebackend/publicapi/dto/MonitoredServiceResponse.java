@@ -10,10 +10,8 @@ public class MonitoredServiceResponse {
 
     private UUID id;
     private String name;
-    private String url;
-    private Integer pollingIntervalSeconds;
     private String status;
     private Instant lastCheckedAt;
-    private Long avgResponseTimeMs;
+    private String healthCheckScenario;
 
 }

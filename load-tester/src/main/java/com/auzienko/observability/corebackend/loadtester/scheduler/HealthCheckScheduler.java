@@ -1,9 +1,7 @@
-package com.auzienko.observability.corebackend.persistence.service;
+package com.auzienko.observability.corebackend.loadtester.scheduler;
 
 import com.auzienko.observability.corebackend.domain.model.MonitoredService;
 import com.auzienko.observability.corebackend.domain.repository.MonitoredServiceRepository;
-import com.auzienko.observability.corebackend.domain.service.HealthMonitor;
-import com.auzienko.observability.corebackend.persistence.helper.HealthCheckExecutor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,12 +12,11 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class HealthMonitorImpl implements HealthMonitor {
+public class HealthCheckScheduler {
 
     private final MonitoredServiceRepository monitoredServiceRepository;
     private final HealthCheckExecutor executor;
 
-    @Override
     @Scheduled(fixedRateString = "${app.monitoring.scheduler.fixed-rate-ms}")
     public void performHealthChecks() {
         log.info("Starting scheduled health checks...");

@@ -30,7 +30,6 @@ public class ServiceRegistryImpl implements ServiceRegistry {
 
         existingService.setName(serviceUpdate.getName());
         existingService.setHealthCheckScenario(serviceUpdate.getHealthCheckScenario());
-        existingService.setPollingIntervalSeconds(serviceUpdate.getPollingIntervalSeconds());
 
         return monitoredServiceRepository.save(existingService);
     }

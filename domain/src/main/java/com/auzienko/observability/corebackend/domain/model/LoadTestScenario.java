@@ -10,8 +10,9 @@ import java.util.List;
 public class LoadTestScenario {
 
     private String name;
-    private int durationSeconds;
-    private int virtualUsers;
+    private Integer durationSeconds;
+    private Integer runs;
+    private Integer virtualUsers;
     private List<Step> steps;
 
 }
