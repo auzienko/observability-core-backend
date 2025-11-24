@@ -1,8 +1,11 @@
 package com.auzienko.observability.corebackend.api.controller;
 
+import com.auzienko.observability.corebackend.api.mapper.HealthCheckApiMapper;
 import com.auzienko.observability.corebackend.api.mapper.MonitoredServiceApiMapper;
+import com.auzienko.observability.corebackend.domain.model.HealthCheckResult;
 import com.auzienko.observability.corebackend.domain.model.MonitoredService;
 import com.auzienko.observability.corebackend.domain.service.ServiceRegistry;
+import com.auzienko.observability.corebackend.publicapi.dto.HealthCheckResponse;
 import com.auzienko.observability.corebackend.publicapi.dto.MonitoredServiceRequest;
 import com.auzienko.observability.corebackend.publicapi.dto.MonitoredServiceResponse;
 import jakarta.validation.Valid;
@@ -16,11 +19,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -32,6 +37,7 @@ public class ServiceRegistryController {
 
     private final ServiceRegistry serviceRegistry;
     private final MonitoredServiceApiMapper mapper;
+    private final HealthCheckApiMapper healthCheckApiMapper;
 
     @PostMapping
     public ResponseEntity<MonitoredServiceResponse> registerService(
@@ -82,6 +88,28 @@ public class ServiceRegistryController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void unregisterService(@PathVariable UUID id) {
         serviceRegistry.unregisterService(id);
+    }
+
+    @GetMapping("/{id}/health-history")
+    public ResponseEntity<List<HealthCheckResponse>> getHealthHistory(
+            @PathVariable UUID id,
+            @RequestParam(defaultValue = "1h") String range) { // e.g., ?range=1h, 24h, 7d
+
+        Duration duration = parseRange(range);
+        List<HealthCheckResult> history = serviceRegistry.getHealthHistoryForService(id, duration);
+        return ResponseEntity.ok(history.stream()
+                .map(healthCheckApiMapper::toResponse)
+                .toList());
+    }
+
+    private Duration parseRange(String range) {
+        if (range.endsWith("h")) {
+            return Duration.ofHours(Long.parseLong(range.replace("h", "")));
+        }
+        if (range.endsWith("d")) {
+            return Duration.ofDays(Long.parseLong(range.replace("d", "")));
+        }
+        return Duration.ofHours(1); // Default
     }
 
 }
